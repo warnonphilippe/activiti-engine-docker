@@ -7,20 +7,14 @@
 #
 # When linking the database, it must be set as "bpmdb" otherwise this script will break.
 #
-
 # Exit on non-zero response
-set -e
-
-# Show commands
-# set -x
-
+# set -e
 # Define some colours for pretty printing
 RED='\033[0;31m'
 BLUE='\033[0;34m'
 NC='\033[0m' # Reset
-
 # This helps for the image build simply by making sure everything that should be set actually has been
-function sanity_check() {
+function sanity_check(){
   for var in DB_HOST DB_PORT DB_USER DB_PASS DB_NAME JDBC_URL; do
     if [ -z ${!var} ]; then
       printf "${RED}Failed sanity check of environment${NC} : $var was not set\n"
@@ -28,8 +22,7 @@ function sanity_check() {
     fi
   done
 }
-
-function configure_mysql() {
+function configure_mysql(){
   JDBC_DRIVER_CLASS="com.mysql.jdbc.Driver"
 
   # See if we are linked
@@ -50,7 +43,7 @@ function configure_mysql() {
   HIBERNATE_DIALECT=MySQLDialect
 }
 
-function configure_postgres() {
+function configure_postgres(){
   JDBC_DRIVER_CLASS="org.postgresql.Driver"
 
   # If we're not linking we might not have some environment variables, so set the defaults
@@ -69,26 +62,26 @@ function configure_postgres() {
 }
 
 # This performs variable substitution on the db.properties file then copies into both the REST and explorer apps
-function update_db_properties() {
+function update_db_properties(){
   sed 's/{{JDBC_DRIVER_CLASS}}/'"${JDBC_DRIVER_CLASS}"'/g' -i /assets/config/db.properties
   sed 's/{{JDBC_URL}}/'"${JDBC_URL}"'/g' -i /assets/config/db.properties
   sed 's/{{JDBC_USER}}/'"${DB_USER}"'/g' -i /assets/config/db.properties
   sed 's/{{JDBC_PASSWORD}}/'"${DB_PASS}"'/g' -i /assets/config/db.properties
-  cp -f /assets/config/db.properties /apache-tomcat/webapps/activiti-rest/WEB-INF/classes
+  cp -f /assets/config/db.properties /usr/local/tomcat/webapps/activiti-rest/WEB-INF/classes
 
   sed 's/{{JDBC_DRIVER_CLASS}}/'"${JDBC_DRIVER_CLASS}"'/g' -i /assets/config/activiti-app.properties
   sed 's/{{JDBC_URL}}/'"${JDBC_URL}"'/g' -i /assets/config/activiti-app.properties
   sed 's/{{JDBC_USER}}/'"${DB_USER}"'/g' -i /assets/config/activiti-app.properties
   sed 's/{{JDBC_PASSWORD}}/'"${DB_PASS}"'/g' -i /assets/config/activiti-app.properties
   sed 's/{{HIBERNATE_DIALECT}}/'"${HIBERNATE_DIALECT}"'/g' -i /assets/config/activiti-app.properties
-  cp -f /assets/config/activiti-app.properties /apache-tomcat/webapps/activiti-app/WEB-INF/classes/META-INF/activiti-app
+  cp -f /assets/config/activiti-app.properties /usr/local/tomcat/webapps/activiti-app/WEB-INF/classes/META-INF/activiti-app
 }
 
 # configure tomcat admin user/password
 TOMCAT_ADMIN_USER=${TOMCAT_ADMIN_USER:-admin}
 TOMCAT_ADMIN_PASSWORD=${TOMCAT_ADMIN_PASSWORD:-admin}
-sed 's,{{TOMCAT_ADMIN_USER}},'"${TOMCAT_ADMIN_USER}"',g' -i /apache-tomcat/conf/tomcat-users.xml
-sed 's,{{TOMCAT_ADMIN_PASSWORD}},'"${TOMCAT_ADMIN_PASSWORD}"',g' -i /apache-tomcat/conf/tomcat-users.xml
+sed 's,{{TOMCAT_ADMIN_USER}},'"${TOMCAT_ADMIN_USER}"',g' -i /usr/local/tomcat/conf/tomcat-users.xml
+sed 's,{{TOMCAT_ADMIN_PASSWORD}},'"${TOMCAT_ADMIN_PASSWORD}"',g' -i /usr/local/tomcat/conf/tomcat-users.xml
 
 case ${DB_TYPE} in
   mysql)
@@ -106,4 +99,4 @@ esac
 sanity_check
 update_db_properties
 
-/apache-tomcat/bin/catalina.sh run
+/usr/local/tomcat/bin/catalina.sh run
