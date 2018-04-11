@@ -2,12 +2,13 @@
 
 Dockerfile to build an [Activiti](#http://www.activiti.org/) BPM container image.
 
-Based on [Frank Wang's work](https://github.com/eternnoir/activiti) and [Colin Woodcock's work](https://github.com/cwoodcock-docker/activiti) this has been extended with support for Activiti 6.
+Based on [Frank Wang's work](https://github.com/eternnoir/activiti), [Colin Woodcock's work](https://github.com/cwoodcock-docker/activiti) and [Jan Boonen's work](https://github.com/boonen/activiti-engine-docker)this has been extended with support DB_SCHEMA parameter allowing to specify the database schema to use.
+Uses local dependencies, don't use wget (to avoid dead links when regenerating the image)
 
 ## Versions
-* Java: 8u60-jdk
-* Tomcat: 8.0.26
-* Activiti: 6.0.0.Beta1
+* Java: openjdk:8-jre-alpine
+* Tomcat: tomcat:9-jre8-alpine
+* Activiti: 6.0.0
 * PostgreSQL driver: 9.4-1201.jdbc41 (needs >= 9.4 server)
 * Mysql connector: 5.1.36
 
@@ -194,6 +195,7 @@ Below is the complete list of available options that can be used to customize yo
 - **DB_HOST**: The database server hostname.
 - **DB_PORT**: The database server port.  Has sane defaults depending on DB_TYPE (3306 for mysql, 5432 for postgres).
 - **DB_NAME**: The database name. Defaults to `activiti`.
+- **DB_SCHEMA**: The database schema name. Defaults to `public`.
 - **DB_USER**: The database user. When linking, it uses the root user for the database otherwise `activiti`.
 - **DB_PASS**: The database password.  When linking this will be discovered from the environment, when remote it **must** be supplied.
 - **TOMCAT\_ADMIN\_USER**: Tomcat admin user name. Defaults to `admin`.
