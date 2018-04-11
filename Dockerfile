@@ -2,11 +2,11 @@
 # Activiti Dockerfile
 #
 FROM podbox/tomcat8
-MAINTAINER Jan Boonen "jan.boonen@geodan.nl"
+MAINTAINER Jan Boonen "warnon.philippe@gmail.com"
 
 EXPOSE 8080
 
-ENV ACTIVITI_VERSION 6.0.0.Beta1
+ENV ACTIVITI_VERSION 6.0.0
 ENV MYSQL_CONNECTOR_JAVA_VERSION 5.1.36
 ENV POSTGRESQL_DRIVER_VERSION 9.4-1201.jdbc41
 
