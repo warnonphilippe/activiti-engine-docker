@@ -7,14 +7,12 @@ MAINTAINER Philippe Warnon "warnon.philippe@gmail.com"
 EXPOSE 8080
 
 # Activiti
+ADD activiti/activiti-app /usr/local/tomcat/webapps/activiti-admin
 ADD activiti/activiti-app /usr/local/tomcat/webapps/activiti-app
 ADD activiti/activiti-rest /usr/local/tomcat/webapps/activiti-rest
 
-# MySQL
-ADD mysql/* /usr/local/tomcat/lib/
-
-# PostgreSQL
-ADD postgres/* /usr/local/tomcat/lib/
+# Drivers
+ADD drivers/* /usr/local/tomcat/lib/
 
 # Configure
 ADD assets /assets

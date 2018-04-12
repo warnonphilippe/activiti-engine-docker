@@ -56,8 +56,8 @@ function configure_postgres(){
   DB_PASS=${DB_PASS:-${BPMDB_ENV_POSTGRES_PASSWORD}}
   DB_NAME=${DB_NAME:-"activiti"}
   DB_SCHEMA=${DB_SCHEMA:-"public"}
-  #JDBC_URL="jdbc:postgresql:\\/\\/${DB_HOST}:${DB_PORT}\\/${DB_NAME}?characterEncoding=utf8"
-  JDBC_URL="jdbc:postgresql:\\/\\/${DB_HOST}:${DB_PORT}\\/${DB_NAME}?currentSchema=${DB_SCHEMA}\\&characterEncoding=utf8"
+  JDBC_URL="jdbc:postgresql:\\/\\/${DB_HOST}:${DB_PORT}\\/${DB_NAME}?characterEncoding=utf8"
+  # JDBC_URL="jdbc:postgresql:\\/\\/${DB_HOST}:${DB_PORT}\\/${DB_NAME}?currentSchema=${DB_SCHEMA}\\&characterEncoding=utf8"
   HIBERNATE_DIALECT=PostgreSQLDialect
 }
 
@@ -75,6 +75,15 @@ function update_db_properties(){
   sed 's/{{JDBC_PASSWORD}}/'"${DB_PASS}"'/g' -i /assets/config/activiti-app.properties
   sed 's/{{HIBERNATE_DIALECT}}/'"${HIBERNATE_DIALECT}"'/g' -i /assets/config/activiti-app.properties
   cp -f /assets/config/activiti-app.properties /usr/local/tomcat/webapps/activiti-app/WEB-INF/classes/META-INF/activiti-app/activiti-app.properties
+  cp -f /assets/config/activiti-app.properties /usr/local/tomcat/webapps/activiti-app/WEB-INF/classes/activiti-app.properties
+
+  sed 's/{{JDBC_DRIVER_CLASS}}/'"${JDBC_DRIVER_CLASS}"'/g' -i /assets/config/activiti-admin.properties
+  sed 's/{{JDBC_URL}}/'"${JDBC_URL}"'/g' -i /assets/config/activiti-admin.properties
+  sed 's/{{JDBC_USER}}/'"${DB_USER}"'/g' -i /assets/config/activiti-admin.properties
+  sed 's/{{JDBC_PASSWORD}}/'"${DB_PASS}"'/g' -i /assets/config/activiti-admin.properties
+  sed 's/{{HIBERNATE_DIALECT}}/'"${HIBERNATE_DIALECT}"'/g' -i /assets/config/activiti-admin.properties
+  cp -f /assets/config/activiti-admin.properties /usr/local/tomcat/webapps/activiti-admin/WEB-INF/classes/META-INF/activiti-admin/activiti-admin.properties
+  cp -f /assets/config/activiti-admin.properties /usr/local/tomcat/webapps/activiti-admin/WEB-INF/classes/activiti-admin.properties
 }
 
 # configure tomcat admin user/password
