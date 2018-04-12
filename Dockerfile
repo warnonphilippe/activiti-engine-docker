@@ -7,7 +7,8 @@ MAINTAINER Philippe Warnon "warnon.philippe@gmail.com"
 EXPOSE 8080
 
 # Activiti
-ADD activiti/* /usr/local/tomcat/webapps/
+ADD activiti/activiti-app /usr/local/tomcat/webapps/activiti-app
+ADD activiti/activiti-rest /usr/local/tomcat/webapps/activiti-rest
 
 # MySQL
 ADD mysql/* /usr/local/tomcat/lib/
@@ -18,6 +19,6 @@ ADD postgres/* /usr/local/tomcat/lib/
 # Configure
 ADD assets /assets
 RUN  cp /assets/config/tomcat/tomcat-users.xml /usr/local/tomcat/conf
-#RUN  cp -f /assets/config/explorer/engine.properties /usr/local/tomcat/webapps/activiti-app/WEB-INF/classes
+RUN  cp -f /assets/config/explorer/engine.properties /usr/local/tomcat/webapps/activiti-app/WEB-INF/classes
 
 CMD ["/bin/bash", "/assets/init"]
